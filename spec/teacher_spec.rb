@@ -21,4 +21,23 @@ RSpec.describe Teacher do
       expect(teacher.can_use_services).to be true
     end
   end
+
+  describe '#to_s' do
+    let(:teacher) { Teacher.new(30, 'John Doe') }
+
+    it 'returns a string representation of the teacher' do
+      teacher.specialization = 'Math'
+      teacher.instance_variable_set(:@id, 123) # Update the id value
+      expected_string = 'Teacher: John Doe, Age: 30, Specialization: Math, ID: 123'
+      expect(teacher.to_s).to eq(expected_string)
+    end
+  end
+
+  describe '#can_use_services' do
+    let(:teacher) { Teacher.new(30, 'John Doe') }
+
+    it 'returns true' do
+      expect(teacher.can_use_services).to eq(true)
+    end
+  end
 end

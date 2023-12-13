@@ -10,6 +10,6 @@ class Teacher < Person
   end
 
   def to_s
-    "Teacher:#{@name}, Age: #{@age}, Specialization: #{@specialization}, ID: #{@id}"
+    "Teacher: #{@name}, Age: #{@age}, Specialization: #{@specialization}, ID: #{@id}"
   end
 end
