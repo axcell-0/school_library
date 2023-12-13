@@ -9,7 +9,7 @@
 # 📗 Table of Contents
 
 - [📗 Table of Contents](#-table-of-contents)
-- [📖 School Library ](#School-Library)
+- [📖 School Library ](#school_library)
   - [🛠 Built With ](#built-with)
     - [Tech Stack ](#tech-stack)
     - [Key Features ](#key-features)
@@ -23,7 +23,6 @@
   - [⭐️ Support ](#support)
   - [🙏 Acknowledgments ](#-acknowledgments-)
   - [📝 License ](#license)
-
 
 <!-- PROJECT DESCRIPTION -->
 
@@ -71,13 +70,13 @@ The School Library Management App is designed to streamline the process of manag
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/axcell-0/school-library.git
+   git clone https://github.com/axcell-0/school_library.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd school-library
+   cd school_library
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -118,7 +117,13 @@ The School Library Management App is designed to streamline the process of manag
 
 <!-- AUTHOR -->
 
-## 👤 Author <a name="author"></a>
+## 👤 Authors <a name="author"></a>
+
+👤 **SAMUEL LEMMA**
+
+- GitHub: [samuel_lemma](https://github.com/sam2if)
+- Twitter: [samuel_lemma](https://twitter.com/samuellemma3733)
+- LinkedIn: [samuel_lemma](https://www.linkedin.com/in/s-lemma/)
 
 👤 Thierry Noumbuh
 
@@ -163,7 +168,7 @@ We welcome contributions from the community. If you'd like to contribute, please
 
 I would like to thank microverse for this project
 
-If you encounter any issues or have questions about using the app, feel free to [contact our support team](https://github.com/axcell-0/school-library/issues).
+If you encounter any issues or have questions about using the app, feel free to [contact our support team](https://github.com/axcell-0/school_library/issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
