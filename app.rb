@@ -1,161 +1,97 @@
 require_relative 'book'
 require_relative 'person'
-require_relative 'rental'
 require_relative 'student'
 require_relative 'teacher'
-
+require_relative 'rental'
 class App
-  MENU_OPTIONS = {
-    '1' => :list_books,
-    '2' => :list_people,
-    '3' => :create_person,
-    '4' => :create_book,
-    '5' => :create_rental,
-    '6' => :list_all_rentals,
-    '7' => :exit_program
-  }.freeze
+  attr_accessor :all_books, :all_people, :all_rentals
 
   def initialize
-    @books = []
-    @rentals = []
-    @people = []
+    @all_books = []
+    @all_people = []
+    @all_rentals = []
   end
 
-  def start
-    loop { choose_option }
-  end
-
-  def list_books
-    if @books.empty?
-      puts 'No books available. Please add some books and try again.'
-    else
-      puts "There are #{@books.count} book(s) available."
-      @books.each_with_index do |book, index|
-        puts "#{index + 1}) Title: \"#{book.title}\" | Author: #{book.author}"
-      end
+  def books
+    @all_books.each_with_index do |book, index|
+      puts "#{index}) #{book}"
     end
   end
 
-  def list_people
-    if @people.empty?
-      puts 'No people added yet. Please add a person and try again.'
-    else
-      @people.each_with_index do |person, index|
-        puts "#{index + 1}) [#{person.class}] Name: #{person.age} | Age: #{person.name} | ID: #{person.id}"
-      end
+  def people
+    @all_people.each_with_index do |person, index|
+      puts "#{index}) #{person}"
     end
   end
 
-  def create_person
-    print 'Would you like to create a student (1) or a teacher (2)? Select a number: '
-    choice = gets.chomp
-    print 'Name: '
+  def add_student
+    puts 'Age: '
+    age = gets.chomp
+    puts 'Name: '
     name = gets.chomp
-    print 'Age: '
-    age = gets.chomp.to_i
-
-    case choice
-    when '1'
-      create_student(name, age)
-    when '2'
-      create_teacher(name, age)
-    else
-      puts 'Invalid choice. Please try again.'
-    end
+    puts 'Has parent persmission[Y/N]: '
+    parent_perm = gets.chomp.upcase
+    persmission = (parent_perm == 'Y')
+    new_student = Student.new(age, name)
+    new_student.parent_permission = persmission
+    @all_people << new_student
+    puts 'Student Created Successfully'
   end
 
-  def create_student(name, age)
-    print 'Grade: '
-    grade = gets.chomp
-    print 'Parent permission? [Y/N]: '
-    permission_option = gets.chomp.downcase
-    student = Student.new(grade, name, age, parent_permission: permission_option == 'y')
-    @people << student
-    puts "Student created successfully. ID is #{student.id}"
-  end
-
-  def create_teacher(name, age)
-    print 'Specialization: '
+  def add_teacher
+    puts 'Age: '
+    age = gets.chomp
+    puts 'Name: '
+    teacher_name = gets.chomp
+    puts 'Specialization: '
     specialization = gets.chomp
-    teacher = Teacher.new(specialization, name, age)
-    @people << teacher
-    puts "Teacher created successfully. Teacher ID is #{teacher.id}"
+    new_teacher = Teacher.new(age, teacher_name)
+    new_teacher.specialization = specialization
+    @all_people << new_teacher
+    puts 'Teacher Created Successfully'
   end
 
-  def create_book
-    print 'Title: '
+  def add_person
+    puts 'Do you want to create a Student(1) or a Teacher(2)? [Input the number]: '
+    num = gets.chomp.to_i
+    case num
+    when 1
+      add_student
+    when 2
+      add_teacher
+    else
+      puts 'Your input is an Invalid choice'
+    end
+  end
+
+  def add_book
+    puts 'Title: '
     title = gets.chomp
-    print 'Author: '
+    puts 'Author: '
     author = gets.chomp
-
-    if title.strip != '' && author.strip != ''
-      book = Book.new(title, author)
-      @books << book
-      puts 'Book created successfully.'
-    else
-      puts 'Please enter the book title and author.'
-    end
+    new_book = Book.new(title, author)
+    @all_books << new_book
+    puts 'Book Created Successfully'
   end
 
-  def create_rental
-    if @books.empty? || @people.empty?
-      puts 'Nothing to see here.'
-      return
-    end
-
-    puts 'Enter the number of the book you want: '
-    list_books
-    book_number = gets.chomp.to_i - 1
-
-    puts '\nSelect a person from the following list by number (not id)'
-    list_people
-    person_id = gets.chomp.to_i
-    individual = @people[person_id - 1]
-
-    print 'Enter the date [yyyy-mm-dd]: '
-    date = gets.chomp.to_s
-    rental = Rental.new(date, @books[book_number], individual)
-    @rentals << rental
-
-    puts 'Book rented successfully.'
+  def add_rental
+    puts 'Select a book  from the following list by number'
+    books
+    book_num = gets.chomp.to_i
+    puts 'Select a person from the list by number (not ID)'
+    people
+    person_num = gets.chomp.to_i
+    puts 'Date: '
+    date = gets.chomp
+    new_rental = Rental.new(date, @all_books[book_num], @all_people[person_num])
+    @all_rentals << new_rental
+    puts 'Rental Added Successfully'
   end
 
-  def list_all_rentals
-    if @rentals.empty?
-      puts 'No rentals available at the moment.'
-    else
-      print 'To view your rentals, enter your ID: '
-      id = gets.chomp.to_i
-      rental = @rentals.select { |rend| rend.person.id == id }
-
-      if rental.empty?
-        puts 'No records for that ID.'
-      else
-        puts 'Here are your records:'
-        puts ''
-        rental.each_with_index do |record, index|
-          puts "#{index + 1}| Date: #{record.date} | Borrower: #{record.person.age} | " \
-               "Status: #{record.person.class} | Borrowed book: \"#{record.book.title}\" by #{record.book.author}"
-        end
-      end
+  def all_personal_rentals(id)
+    person_rental = @all_rentals.select do |rental|
+      rental.person.id == id
     end
-  end
-
-  def choose_option
-    puts 'Please choose an option by selecting a number:'
-    MENU_OPTIONS.each { |key, value| puts "#{key}. #{value.to_s.tr('_', ' ')}" }
-
-    option = gets.chomp
-
-    if MENU_OPTIONS.include?(option)
-      send(MENU_OPTIONS[option])
-    else
-      puts 'Invalid input. Try again.'
-    end
-  end
-
-  def exit_program
-    puts 'Thank you for using the app.'
-    exit!
+    puts person_rental
   end
 end
